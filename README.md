@@ -9,7 +9,7 @@ A Devvit [(Reddit's Developer Platform)](https://developers.reddit.com/) app whi
 ### Discord
 To set-up this app to send incoming and outgoing modmails to a particular channel of your Discord server through a Webhook follow these steps.
 
-1. **Get Discord Webhook URL** : You'll need to generate a Discord Webhook URL from channel settings. Detailed instructions can be found below -
+1. **Get Discord Webhook URL** : You'll need to generate a Discord Webhook URL from channel settings. Detailed instructions can be found below :
    
 <details>
 <summary> Instructions to Get Discord Webhook URL </summary>
