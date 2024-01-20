@@ -20,3 +20,5 @@ To set-up this app to send incoming and outgoing modmails to a particular channe
 4.  **Copy the Webhook URL:**  - After creating the webhook, you'll see a section with the webhook URL. - Click on the "Copy" button next to the webhook URL to save it to your clipboard.  
 
 </details>
+
+2. **Put the URL in your app settings** : After you have obtained the webhook URL, you'll need to put it in the app settings. App settings can be found at `https://developers.reddit.com/r/[insert-your-subreddit-name]/apps/modmailtodiscord/`.
