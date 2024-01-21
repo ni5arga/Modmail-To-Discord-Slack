@@ -2,7 +2,7 @@
   "private": true,
   "name": "modmailtodiscord",
   "version": "0.0.0",
-  "license": "BSD-3-Clause",
+  "license": "GPL V3",
   "type": "module",
   "scripts": {
     "test": "npm run test:unit",
