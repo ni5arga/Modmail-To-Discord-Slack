@@ -48,6 +48,7 @@ The app sends all incoming and outgoing modmails from your subreddit's modmail t
 **Second Embed** :
 
  5. Conversation Type -  Conversation Type specifies whether a conversation is with a subreddit itself, with another user, or with another subreddit entirely. `internal` means conversation with a Mod Discussion, internal to the subreddit.`sr_user` means conversation between the subreddit & an another user outside of the subreddit. `sr_sr` means conversation between two different subreddits.
+ 6. Conversation State - The State of the modmail conversation. Can be `Appeals`, `Archived`, `Filtered`, `InProgress` & `JoinRequests`.
 
     
 
