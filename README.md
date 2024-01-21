@@ -51,5 +51,7 @@ The app sends all incoming and outgoing modmails from your subreddit's modmail t
  6. Conversation State - The State of the modmail conversation. Can be `New`, `Appeals`, `Archived`, `Filtered`, `InProgress` & `JoinRequests`.
  7. Participant - The participant in the modmail conversation (it'll be the user in most cases).
  8. Participant Information - Some information about participant. `isMod`: is the participant a mod of the subreddit, `isAdmin`: is the user an admin, `isApproved`: is the user an Approved user, `isHidden`: is the user Hidden, `isDeleted`: is the participant a Deleted account, `isAuto`: is the conversation automatically generated e.g. from automod, u/reddit.
+ 9. Last Updated At - Shows the time & date when the conversation was last added.
+ 10. isInternalModmail (mod-only) - Tells if the modmail conversation is mod-only.
     
 
