@@ -21,6 +21,6 @@ To set-up this app to send incoming and outgoing modmails to a particular channe
 
 </details>
 
-2. **Put the URL in your app settings** : After you have obtained the webhook URL, you'll need to put it in the app settings. App settings can be found at `https://developers.reddit.com/r/[insert-your-subreddit-name]/apps/modmailtodiscord/`. After putting the Webhook URL in the text-box - click on the Save Changes button.
+2. **Put the URL in your app settings** : After you have obtained the webhook URL, you'll need to put it in the app settings. App settings can be found at `https://developers.reddit.com/r/insert-your-subreddit-name-here/apps/modmailtodiscord/`. After putting the Webhook URL in the text-box - click on the Save Changes button.
 
 Now the app will send all incoming or outgoing modmails from your subreddit's modmail to the Discord Channel through the webhook.
