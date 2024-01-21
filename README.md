@@ -4,9 +4,13 @@ A Devvit [(Reddit's Developer Platform)](https://developers.reddit.com/) app whi
 App Link : https://developers.reddit.com/apps/modmailtodiscord
 
 ## Screenshots
-| Discord | Slack |
-| --- | --- |
-| ![Discord](https://i.imgur.com/XibttPT.png) | ![Slack](https://i.imgur.com/DgarVVg.png) |
+| Discord |
+| --- |
+| ![Discord](https://i.imgur.com/XibttPT.png) |
+
+| Slack |
+| --- |
+| ![Slack](https://i.imgur.com/DgarVVg.png) |
 
 
 ## Setup Instructions
