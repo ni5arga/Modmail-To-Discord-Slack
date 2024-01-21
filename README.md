@@ -11,7 +11,7 @@ App Link : https://developers.reddit.com/apps/modmailtodiscord
 ### Discord
 To set-up this app to send incoming and outgoing modmails to a particular channel of your Discord server through a Webhook follow these steps.
 
-1. **Get Discord Webhook URL** : You'll need to generate a Discord Webhook URL from channel settings. You can learn how to get webhook URLs from [this guide](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks) or detailed instructions on how to generate Discord Webhook URL can be found below. Discord Webhook URLs look like this `https://discord.com/api/webhooks/1234567880123/38823asdihasuad_d83289324Q`.
+1. **Get Discord Webhook URL** : You'll need to generate a Discord Webhook URL from channel settings. You can learn how to get webhook URLs from [this guide](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks) or detailed instructions on how to generate Discord Webhook URL can be found below. Discord Webhook URLs look like this `https://discord.com/api/webhooks/1234567880123/38823ax30320bx_d83289324Q`.
    
 <details>
 <summary> Instructions on how to Get Discord Webhook URL </summary>
