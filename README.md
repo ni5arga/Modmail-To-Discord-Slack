@@ -35,4 +35,17 @@ To set-up this app to send incoming and outgoing modmails to a particular channe
 
 Now the app will send all incoming or outgoing modmails from your subreddit's modmail to the Slack Channel through the webhook.
 
+## Details 
+The app sends all incoming and outgoing modmails from your subreddit's modmail to your Discord/Slack Channel through webhooks. Here are the details the app currently sends.
+
+**First Embed** : 
+ 1. Modmail Subject - The subject of the modmail (incoming or outgoing).
+ 2. Modmail Link - The link of the modmail thread, the app sends `https://mod.reddit.com/all/{conversation-ID-here}` links.
+ 3. Body - Sends the message body in markdown.
+ 4. Participating As - What the user is participating as, as `participant_user` or as `moderator`.
+
+**Second Embed** :
+ 5. Conversation Type 
+
+    
 
