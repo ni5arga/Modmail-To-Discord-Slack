@@ -1,6 +1,8 @@
 # Reddit Modmail To Discord or Slack
 A Devvit [(Reddit's Developer Platform)](https://developers.reddit.com/) app which sends incoming and outgoing modmails from your subreddit's modmail to a Discord or Slack webhook instantly.  Sends the message, sender, participant information etc. &amp; other relevant information to the webhook payload.
 
+App Link : https://developers.reddit.com/apps/modmailtodiscord
+
 ## Screenshots
 ![Discord](https://i.imgur.com/XibttPT.png)
 ![Slack](https://i.imgur.com/DgarVVg.png)
@@ -53,5 +55,11 @@ The app sends all incoming and outgoing modmails from your subreddit's modmail t
  8. Participant Information - Some information about participant. `isMod`: is the participant a mod of the subreddit, `isAdmin`: is the user an admin, `isApproved`: is the user an Approved user, `isHidden`: is the user Hidden, `isDeleted`: is the participant a Deleted account, `isAuto`: is the conversation automatically generated e.g. from automod, u/reddit.
  9. Last Updated At - Shows the time & date when the conversation was last added.
  10. isInternalModmail (mod-only) - Tells if the modmail conversation is mod-only.
+
+## Contributions
+Feel free to contribute & improve this project, pull requests & issues are always welcome.
+
+## License 
+This source code is licensed under [GNU General Public License v3.0](https://github.com/ni5arga/Modmail-To-Discord-Slack/blob/main/LICENSE).
     
 
