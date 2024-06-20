@@ -83,7 +83,7 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
               name: authorName,
               url: authorProfileLink,
             },
-            description: `**Author:** [${authorName}](${authorProfileLink})\n**Body:** **${body}**\n\n**Participant:** ${result.conversation?.participant?.name}\n**Participating As:** ${participatingAs}`,
+            description: `Author: [**${authorName}**](${authorProfileLink})\nBody: **${body}**\n\nParticipant: **${result.conversation?.participant?.name}**\nParticipating As: **${participatingAs}**`,
             color: 3447003, // Discord's blue color
           },
         ],
@@ -110,3 +110,6 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
 }
 
 export default Devvit;
+
+
+
