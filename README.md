@@ -49,9 +49,12 @@ The app sends all incoming and outgoing modmails from your subreddit's modmail t
 
  1. Modmail Subject - The subject of the modmail (incoming or outgoing).
  2. Modmail Link - The link of the modmail thread, the app sends `https://mod.reddit.com/all/{conversation-ID-here}` links.
- 3. Body - Sends the message body in markdown.
- 4. Participant - The participant of the modmail conversation (most of the times it'll be the user, unless it's a mod discussion or a subreddit to subreddit conversation).
- 5. Participating As - What the user is participating as, whether as `participant_user` or as `moderator`.
+ 3. Author - Author of the modmail message or the latest message in the modmail thread.
+ 4. Body - Sends the message body in markdown.
+ 5. Participant - The participant of the modmail conversation (most of the times it'll be the user, unless it's a mod discussion or a subreddit to subreddit conversation).
+ 6. Participating As - What the user is participating as, whether as `participant_user` or as `moderator`.
+
+
 
 ## Contributions
 Feel free to contribute and improve this project. Pull requests and issues are always welcome.
