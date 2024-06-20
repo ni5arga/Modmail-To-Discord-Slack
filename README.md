@@ -44,23 +44,14 @@ To set-up this app to send incoming and outgoing modmails to a particular channe
 Now the app will send all incoming or outgoing modmails from your subreddit's modmail to the Slack channel through the webhook.
 
 ## Details 
-The app sends all incoming and outgoing modmails from your subreddit's modmail to your Discord/Slack channel through webhooks. Here are the details the app currently sends:
+The app sends all incoming and outgoing modmails from your subreddit's modmail to your Discord/Slack channel through webhooks. Here are the details the app currently sends (more to be added soon):
 
-**First Embed** : 
 
  1. Modmail Subject - The subject of the modmail (incoming or outgoing).
  2. Modmail Link - The link of the modmail thread, the app sends `https://mod.reddit.com/all/{conversation-ID-here}` links.
  3. Body - Sends the message body in markdown.
- 4. Participating As - What the user is participating as, whether as `participant_user` or as `moderator`.
-
-**Second Embed** :
-
- 5. Conversation Type -  Conversation Type specifies whether a conversation is with a subreddit itself, with another user, or with another subreddit entirely. `internal` means conversation with a Mod Discussion, internal to the subreddit.`sr_user` means conversation between the subreddit and another user outside of the subreddit. `sr_sr` means conversation between two different subreddits.
- 6. Conversation State - The State of the modmail conversation. Can be `New`, `Appeals`, `Archived`, `Filtered`, `InProgress` & `JoinRequests`.
- 7. Participant - The participant in the modmail conversation (it'll be the user in most cases).
- 8. Participant Information - Some information about participant. `isMod`: is the participant a mod of the subreddit, `isAdmin`: is the user an admin, `isApproved`: is the user an Approved user, `isHidden`: is the user Hidden, `isDeleted`: is the participant a Deleted account, `isAuto`: is the conversation automatically generated e.g. from automod, u/reddit.
- 9. Last Updated At - Shows the time & date when the conversation was last added.
- 10. isInternalModmail (mod-only) - Tells if the modmail conversation is mod-only.
+ 4. Participant - The participant in the modmail conversation.
+ 5. Participating As - What the user is participating as, whether as `participant_user` or as `moderator`.
 
 ## Contributions
 Feel free to contribute and improve this project. Pull requests and issues are always welcome.
