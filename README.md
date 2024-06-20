@@ -6,11 +6,11 @@ App Link : https://developers.reddit.com/apps/modmailtodiscord
 ## Screenshots
 | Discord |
 | --- |
-| ![Discord](https://i.imgur.com/XibttPT.png) |
+| ![Discord](https://i.imgur.com/yq5VX5o.png) |
 
 | Slack |
 | --- |
-| ![Slack](https://i.imgur.com/DgarVVg.png) |
+| ![Slack](https://i.imgur.com/ZwJa805.png) |
 
 
 ## Setup Instructions
