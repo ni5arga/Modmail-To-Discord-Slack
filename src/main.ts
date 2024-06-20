@@ -1,5 +1,7 @@
-import { Devvit, Context, OnTriggerEvent, TriggerContext } from '@devvit/public-api';
+import { Devvit, Context, TriggerContext } from '@devvit/public-api';
 import { ModMail, MessageData } from '@devvit/protos';
+
+const discordWebhookURLs = ['canary.discord.com', 'ptb.discord.com', 'discord.com', 'canary.discordapp.com', 'ptb.discordapp.com', 'discordapp.com'];
 
 Devvit.configure({
   http: true,
@@ -16,26 +18,22 @@ Devvit.addSettings([
 
 Devvit.addTrigger({
   event: 'ModMail',
-  onEvent: async (event: OnTriggerEvent<ModMail>, context: TriggerContext) => {
+  onEvent: async (event: ModMail, context: TriggerContext) => {
     try {
-
       if (!context) {
         throw new Error('Context is probably undefined');
       }
 
       await sendModMailToWebhook(event, context);
     } catch (error: any) {
-
-      // let's handle errors and log them 
       console.error('There was an error:', error.message);
     }
   },
 });
 
-async function sendModMailToWebhook(event: OnTriggerEvent<ModMail>, context: TriggerContext) {
+async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
   try {
-
-    // Retrieve the settings :)
+    // Retrieve the settings
     const webhook = (await context?.settings.get('webhook')) as string;
 
     if (!webhook) {
@@ -51,12 +49,11 @@ async function sendModMailToWebhook(event: OnTriggerEvent<ModMail>, context: Tri
     });
     const modmailLink = `https://mod.reddit.com/mail/all/${actualConversationId}`;
 
-    // get the latest message
+    // Get the latest message
     const messages = result.conversation?.messages ?? {};
     const messageIds = Object.keys(messages);
     const lastMessageId = messageIds.length > 0 ? messageIds[messageIds.length - 1] : undefined;
     const lastMessage: MessageData | undefined = lastMessageId ? messages[lastMessageId] : undefined;
-    // error if no message is found
 
     if (!lastMessage) {
       console.error('No messages found');
@@ -73,52 +70,9 @@ async function sendModMailToWebhook(event: OnTriggerEvent<ModMail>, context: Tri
     // Check if the webhook is a Slack webhook
     if (webhook.startsWith('https://hooks.slack.com/')) {
       payload = {
-        text: `*Modmail Subject:* ${result.conversation?.subject}\n*Author:* ${authorName}\n*Body:* ${body}\n*Participating As:* ${participatingAs}\n*Modmail Link:* ${modmailLink}`,
-        attachments: [
-          {
-            fallback: 'Modmail Details',
-            color: '#3498db',
-            fields: [
-              {
-                title: 'Conversation Type',
-                value: `${result.conversation?.conversationType}`,
-                short: true,
-              },
-              {
-                title: 'Conversation State',
-                value: `${result.conversation?.state}`,
-                short: true,
-              },
-              {
-                title: 'Participant',
-                value: `${result.conversation?.participant?.name}`,
-                short: true,
-              },
-              {
-                title: 'Number of Messages',
-                value: `${result.conversation?.numMessages}`,
-                short: true,
-              },
-              {
-                title: 'Participant Information',
-                value: `isMod: ${result.conversation?.participant?.isMod}, isAdmin: ${result.conversation?.participant?.isAdmin}, isApproved: ${result.conversation?.participant?.isApproved}, isHidden: ${result.conversation?.participant?.isHidden}, isDeleted: ${result.conversation?.participant?.isDeleted}, isAuto: ${result.conversation?.isAuto}`,
-                short: false,
-              },
-              {
-                title: 'Last Updated At',
-                value : `${result.conversation?.lastUpdated}`,
-                short: false,
-              },
-              {
-                title: 'isInternalModmail (Mod-only)',
-                value: `${result.conversation?.isInternal}`,
-                short: true,
-              },
-            ],
-          },
-        ],
+        text: `*Modmail Subject:* <${modmailLink}|${result.conversation?.subject}>\n*Author:* <${authorProfileLink}|${authorName}>\n*Body:* ${body}\n\n*Participant:* ${result.conversation?.participant?.name}\n*Participating As:* ${participatingAs}`,
       };
-    } else if (webhook.startsWith('https://discord.com/api/webhooks/')) {
+    } else if (discordWebhookURLs.some(url => webhook.startsWith(`https://${url}/api/webhooks/`))) {
       // Check if the webhook is a Discord webhook
       payload = {
         embeds: [
@@ -129,47 +83,8 @@ async function sendModMailToWebhook(event: OnTriggerEvent<ModMail>, context: Tri
               name: authorName,
               url: authorProfileLink,
             },
-            description: `Body: **${body}**\n\nParticipating As: ${participatingAs}`,
-          },
-          {
-            title: 'Modmail Conversation Details',
-            fields: [
-              {
-                name: 'Conversation Type',
-                value: `${result.conversation?.conversationType}`,
-                inline: true,
-              },
-              {
-                name: 'Conversation State',
-                value: `${result.conversation?.state}`,
-                inline: true,
-              },
-              {
-                name: 'Participant',
-                value: `${result.conversation?.participant?.name}`,
-                inline: true,
-              },
-              {
-                name: 'Number of Messages',
-                value: `${result.conversation?.numMessages}`,
-                inline: true,
-              },
-              {
-                name: 'Participant Information',
-                value: `isMod: ${result.conversation?.participant?.isMod}, isAdmin: ${result.conversation?.participant?.isAdmin}, isApproved: ${result.conversation?.participant?.isApproved}, isHidden: ${result.conversation?.participant?.isHidden}, isDeleted: ${result.conversation?.participant?.isDeleted}, isAuto: ${result.conversation?.isAuto}`,
-                inline: true,
-              },
-              {
-                name: 'Last Updated At',
-                value: `${result.conversation?.lastUpdated}`,
-                inline: true,
-              },
-              {
-                name: 'isInternalModmail (Mod-only)',
-                value: `${result.conversation?.isInternal}`,
-                inline: true,
-              },
-            ],
+            description: `Author: [**${authorName}**](${authorProfileLink})\nBody: **${body}**\n\nParticipant: **${result.conversation?.participant?.name}**\nParticipating As: **${participatingAs}**`,
+            color: 3447003, // Discord's blue color
           },
         ],
       };
@@ -195,5 +110,6 @@ async function sendModMailToWebhook(event: OnTriggerEvent<ModMail>, context: Tri
 }
 
 export default Devvit;
+
 
 
