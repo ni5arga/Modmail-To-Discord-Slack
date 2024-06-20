@@ -1,5 +1,8 @@
-import { Devvit, Context, OnTriggerEvent, TriggerContext } from '@devvit/public-api';
+import { Devvit, Context, TriggerContext } from '@devvit/public-api';
 import { ModMail, MessageData } from '@devvit/protos';
+
+const discordWebhookURLs = ['canary.discord.com', 'ptb.discord.com', 'discord.com', 'canary.discordapp.com', 'ptb.discordapp.com', 'discordapp.com'];
+
 
 Devvit.configure({
   http: true,
@@ -16,7 +19,7 @@ Devvit.addSettings([
 
 Devvit.addTrigger({
   event: 'ModMail',
-  onEvent: async (event: OnTriggerEvent<ModMail>, context: TriggerContext) => {
+  onEvent: async (event: ModMail, context: TriggerContext) => {
     try {
 
       if (!context) {
@@ -32,7 +35,7 @@ Devvit.addTrigger({
   },
 });
 
-async function sendModMailToWebhook(event: OnTriggerEvent<ModMail>, context: TriggerContext) {
+async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
   try {
 
     // Retrieve the settings :)
@@ -118,7 +121,7 @@ async function sendModMailToWebhook(event: OnTriggerEvent<ModMail>, context: Tri
           },
         ],
       };
-    } else if (webhook.startsWith('https://discord.com/api/webhooks/')) {
+    } else if (discordWebhookURLs.some(url => webhook.startsWith(`https://${url}/api/webhooks/`))) {
       // Check if the webhook is a Discord webhook
       payload = {
         embeds: [
@@ -195,5 +198,3 @@ async function sendModMailToWebhook(event: OnTriggerEvent<ModMail>, context: Tri
 }
 
 export default Devvit;
-
-
