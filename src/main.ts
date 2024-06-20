@@ -3,7 +3,6 @@ import { ModMail, MessageData } from '@devvit/protos';
 
 const discordWebhookURLs = ['canary.discord.com', 'ptb.discord.com', 'discord.com', 'canary.discordapp.com', 'ptb.discordapp.com', 'discordapp.com'];
 
-
 Devvit.configure({
   http: true,
   redditAPI: true,
@@ -21,15 +20,12 @@ Devvit.addTrigger({
   event: 'ModMail',
   onEvent: async (event: ModMail, context: TriggerContext) => {
     try {
-
       if (!context) {
         throw new Error('Context is probably undefined');
       }
 
       await sendModMailToWebhook(event, context);
     } catch (error: any) {
-
-      // let's handle errors and log them 
       console.error('There was an error:', error.message);
     }
   },
@@ -37,7 +33,6 @@ Devvit.addTrigger({
 
 async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
   try {
-
     // Retrieve the settings :)
     const webhook = (await context?.settings.get('webhook')) as string;
 
@@ -109,7 +104,7 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
               },
               {
                 title: 'Last Updated At',
-                value : `${result.conversation?.lastUpdated}`,
+                value: `${result.conversation?.lastUpdated}`,
                 short: false,
               },
               {
@@ -132,47 +127,7 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
               name: authorName,
               url: authorProfileLink,
             },
-            description: `Body: **${body}**\n\nParticipating As: ${participatingAs}`,
-          },
-          {
-            title: 'Modmail Conversation Details',
-            fields: [
-              {
-                name: 'Conversation Type',
-                value: `${result.conversation?.conversationType}`,
-                inline: true,
-              },
-              {
-                name: 'Conversation State',
-                value: `${result.conversation?.state}`,
-                inline: true,
-              },
-              {
-                name: 'Participant',
-                value: `${result.conversation?.participant?.name}`,
-                inline: true,
-              },
-              {
-                name: 'Number of Messages',
-                value: `${result.conversation?.numMessages}`,
-                inline: true,
-              },
-              {
-                name: 'Participant Information',
-                value: `isMod: ${result.conversation?.participant?.isMod}, isAdmin: ${result.conversation?.participant?.isAdmin}, isApproved: ${result.conversation?.participant?.isApproved}, isHidden: ${result.conversation?.participant?.isHidden}, isDeleted: ${result.conversation?.participant?.isDeleted}, isAuto: ${result.conversation?.isAuto}`,
-                inline: true,
-              },
-              {
-                name: 'Last Updated At',
-                value: `${result.conversation?.lastUpdated}`,
-                inline: true,
-              },
-              {
-                name: 'isInternalModmail (Mod-only)',
-                value: `${result.conversation?.isInternal}`,
-                inline: true,
-              },
-            ],
+            description: `Body: **${body}**\n\nParticipant: ${result.conversation?.participant?.name}\nParticipating As: ${participatingAs}`,
           },
         ],
       };
