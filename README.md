@@ -54,7 +54,16 @@ The app sends all incoming and outgoing modmails from your subreddit's modmail t
  5. Participant - The participant of the modmail conversation (most of the times it'll be the user, unless it's a mod discussion or a subreddit to subreddit conversation).
  6. Participating As - What the user is participating as, whether as `participant_user` or as `moderator`.
 
+## Changelog
 
+### Changes in 0.0.16
+
+Added a setting to ignore outgoing modmail messages and not send them to the webhook.
+
+### Changes in 0.0.15
+
+- Decluttered Discord & Slack embed.
+- Added support for more Discord webhook URLs (Canary & PTB etc.)
 
 ## Contributions
 Feel free to contribute and improve this project. Pull requests and issues are always welcome.
