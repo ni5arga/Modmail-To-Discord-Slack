@@ -58,7 +58,7 @@ The app sends all incoming and outgoing modmails from your subreddit's modmail t
 
 ### Changes in 0.0.16
 
-Added a setting to ignore outgoing modmail messages and not send them to the webhook.
+Added a setting for the app to ignore outgoing modmail messages by mods and not send them to the webhook (optional).
 
 ### Changes in 0.0.15
 
