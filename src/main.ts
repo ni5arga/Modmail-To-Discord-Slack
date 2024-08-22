@@ -8,11 +8,18 @@ Devvit.configure({
   redditAPI: true,
 });
 
+
 Devvit.addSettings([
   {
     type: 'string',
     name: 'webhook',
     label: 'Webhook URL (Discord or Slack)',
+  },
+  {
+    type: 'boolean',
+    name: 'outgoing',
+    label: 'Whether to send outgoing messages by mods to the webhook payload (Enabled by default, if disabled outgoing messages by mods will not be sent to the webhook payload.)',
+    defaultValue: true,
   },
 ]);
 
@@ -31,10 +38,12 @@ Devvit.addTrigger({
   },
 });
 
+
 async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
   try {
     // Retrieve the settings
     const webhook = (await context?.settings.get('webhook')) as string;
+    const outgoing = (await context?.settings.get('outgoing')) as boolean;
 
     if (!webhook) {
       console.error('No webhook URL provided');
@@ -65,6 +74,12 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
     const participatingAs = lastMessage.participatingAs ?? 'Unknown';
     const authorProfileLink = `https://www.reddit.com/u/${authorName}`;
 
+    if (participatingAs === 'moderator' && !outgoing) {
+      console.log('Not sending outgoing messages to the webhook');
+      return;
+    }
+
+    // Prepare and send payload
     let payload;
 
     // Check if the webhook is a Slack webhook
@@ -84,7 +99,7 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
               url: authorProfileLink,
             },
             description: `Author: [**${authorName}**](${authorProfileLink})\nBody: **${body}**\n\nParticipant: **${result.conversation?.participant?.name}**\nParticipating As: **${participatingAs}**`,
-            color: 3447003, // Discord's blue color
+            color: 3447003, 
           },
         ],
       };
@@ -110,6 +125,3 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
 }
 
 export default Devvit;
-
-
-
