@@ -1,4 +1,4 @@
-import { Devvit, Context, TriggerContext } from '@devvit/public-api';
+import { Devvit, TriggerContext } from '@devvit/public-api';
 import { ModMail, MessageData } from '@devvit/protos';
 
 const discordWebhookURLs = ['canary.discord.com', 'ptb.discord.com', 'discord.com', 'canary.discordapp.com', 'ptb.discordapp.com', 'discordapp.com'];
@@ -41,7 +41,7 @@ Devvit.addTrigger({
 
 async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
   try {
-    // Retrieve the settings
+    // Retrieve settings
     const webhook = (await context?.settings.get('webhook')) as string;
     const outgoing = (await context?.settings.get('outgoing')) as boolean;
 
@@ -58,7 +58,7 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
     });
     const modmailLink = `https://mod.reddit.com/mail/all/${actualConversationId}`;
 
-    // Get the latest message
+    // Get latest message
     const messages = result.conversation?.messages ?? {};
     const messageIds = Object.keys(messages);
     const lastMessageId = messageIds.length > 0 ? messageIds[messageIds.length - 1] : undefined;
@@ -82,13 +82,13 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
     // Prepare and send payload
     let payload;
 
-    // Check if the webhook is a Slack webhook
+    // Check if webhook is Slack webhook
     if (webhook.startsWith('https://hooks.slack.com/')) {
       payload = {
         text: `*Modmail Subject:* <${modmailLink}|${result.conversation?.subject}>\n*Author:* <${authorProfileLink}|${authorName}>\n*Body:* ${body}\n\n*Participant:* ${result.conversation?.participant?.name}\n*Participating As:* ${participatingAs}`,
       };
     } else if (discordWebhookURLs.some(url => webhook.startsWith(`https://${url}/api/webhooks/`))) {
-      // Check if the webhook is a Discord webhook
+      // Check if webhook is Discord webhook
       payload = {
         embeds: [
           {
@@ -119,7 +119,7 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
       console.error('Error sending data to webhook');
     }
   } catch (error: any) {
-    // Let's handle the errors and log them
+    // Handle errors and log them
     console.error('Error:', error.message);
   }
 }
