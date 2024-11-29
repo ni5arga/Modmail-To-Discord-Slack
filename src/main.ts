@@ -1,5 +1,5 @@
+import { MessageData, ModMail } from "@devvit/protos";
 import { Devvit, TriggerContext } from "@devvit/public-api";
-import { ModMail, MessageData } from "@devvit/protos";
 
 const discordWebhookURLs = [
   "canary.discord.com",
@@ -70,8 +70,7 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
     // Get latest message
     const messages = result.conversation?.messages ?? {};
     const messageIds = Object.keys(messages);
-    const lastMessageId =
-      messageIds.length > 0 ? messageIds[messageIds.length - 1] : undefined;
+    const lastMessageId = messageIds.length > 0 ? messageIds[messageIds.length - 1] : undefined;
     const lastMessage: MessageData | undefined = lastMessageId
       ? messages[lastMessageId]
       : undefined;
@@ -97,12 +96,11 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
     // Check if webhook is Slack webhook
     if (webhook.startsWith("https://hooks.slack.com/")) {
       payload = {
-        text: `*Modmail Subject:* <${modmailLink}|${result.conversation?.subject}>\n*Author:* <${authorProfileLink}|${authorName}>\n*Body:* ${body}\n\n*Participant:* ${result.conversation?.participant?.name}\n*Participating As:* ${participatingAs}`,
+        text:
+          `*Modmail Subject:* <${modmailLink}|${result.conversation?.subject}>\n*Author:* <${authorProfileLink}|${authorName}>\n*Body:* ${body}\n\n*Participant:* ${result.conversation?.participant?.name}\n*Participating As:* ${participatingAs}`,
       };
     } else if (
-      discordWebhookURLs.some((url) =>
-        webhook.startsWith(`https://${url}/api/webhooks/`),
-      )
+      discordWebhookURLs.some((url) => webhook.startsWith(`https://${url}/api/webhooks/`))
     ) {
       // Check if webhook is Discord webhook
       payload = {
@@ -114,7 +112,8 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
               name: authorName,
               url: authorProfileLink,
             },
-            description: `Author: [**${authorName}**](${authorProfileLink})\nBody: **${body}**\n\nParticipant: **${result.conversation?.participant?.name}**\nParticipating As: **${participatingAs}**`,
+            description:
+              `Author: [**${authorName}**](${authorProfileLink})\nBody: **${body}**\n\nParticipant: **${result.conversation?.participant?.name}**\nParticipating As: **${participatingAs}**`,
             color: 3447003,
           },
         ],
