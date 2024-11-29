@@ -3,6 +3,7 @@
 A Devvit [(Reddit's Developer Platform)](https://developers.reddit.com/) app that instantly sends incoming and outgoing modmails from your subreddit's modmail to a Discord or Slack webhook.  Sends the message, sender, participant information, &amp; other relevant information to the webhook payload.
 
 App Link: https://developers.reddit.com/apps/modmailtodiscord
+
 App Identifier: modmailtodiscord
 
 ## Screenshots
