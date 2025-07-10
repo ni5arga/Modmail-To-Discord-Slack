@@ -1,5 +1,3 @@
-![test workflow](https://github.com/ni5arga/Modmail-To-Discord-Slack/actions/workflows/test.yml/badge.svg)
-
 # Reddit Modmail To Discord or Slack
 
 A Devvit [(Reddit's Developer Platform)](https://developers.reddit.com/) app that instantly sends incoming and outgoing modmails from your subreddit's modmail to a Discord or Slack webhook. Sends the message, sender, participant information, &amp; other relevant information to the webhook payload.
@@ -55,13 +53,15 @@ The app sends all incoming and outgoing modmails from your subreddit's modmail t
 
 ## Changelog
 
-### v0.0.16
+**Latest Version:**
+- Added a feature to which helps to differentiate between regular messages and private mod notes.
+- Added ignore-list which helps mods to ignore messages from certain users/mods.
+- Added discord role-ping feature.
+- Mod discussion syncing setting.
 
-- Add setting for app to ignore outgoing modmail messages by mods and not send them to the webhook (optional)
-
-### v0.0.15
-
-- Declutter Discord & Slack embed
+**Previous Versions:**
+- Add setting for app to ignore outgoing modmail messages by mods and not send them to the webhook 
+- Declutter Discord & Slack embed 
 - Add support for more Discord webhook URLs (Canary, PTB, etc.)
 
 ## Contributions
