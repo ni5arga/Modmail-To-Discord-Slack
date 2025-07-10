@@ -28,6 +28,12 @@ Devvit.addSettings([
       "Whether to send outgoing messages by mods to the webhook payload (Enabled by default, if disabled outgoing messages by mods will not be sent to the webhook payload.)",
     defaultValue: true,
   },
+  {
+    type: "string",
+    name: "ignoreUsers",
+    label: "Ignore list (comma-separated usernames, don't include u/)",
+    helpText: "Add Reddit usernames (case-insensitive) separated by commas to skip them from webhook payloads (example: username1, username2, username3)",
+  },
 ]);
 
 Devvit.addTrigger({
@@ -47,9 +53,13 @@ Devvit.addTrigger({
 
 async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
   try {
-    // Retrieve settings
     const webhook = (await context?.settings.get("webhook")) as string;
     const outgoing = (await context?.settings.get("outgoing")) as boolean;
+    const ignoreListRaw = (await context?.settings.get("ignoreUsers")) as string;
+    const ignoreList = (ignoreListRaw || "")
+      .split(",")
+      .map((u) => u.trim().toLowerCase())
+      .filter(Boolean);
 
     if (!webhook) {
       console.error("No webhook URL provided");
@@ -62,12 +72,11 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
       "",
     );
     const result = await context.reddit.modMail.getConversation({
-      conversationId: conversationId,
+      conversationId,
       markRead: false,
     });
     const modmailLink = `https://mod.reddit.com/mail/all/${actualConversationId}`;
 
-    // Get latest message
     const messages = result.conversation?.messages ?? {};
     const messageIds = Object.keys(messages);
     const lastMessageId = messageIds.length > 0 ? messageIds[messageIds.length - 1] : undefined;
@@ -85,15 +94,18 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
     const participatingAs = lastMessage.participatingAs ?? "Unknown";
     const authorProfileLink = `https://www.reddit.com/u/${authorName}`;
 
+    if (ignoreList.includes(authorName.toLowerCase())) {
+      console.log(`User "${authorName}" is in the ignore list. Skipping webhook.`);
+      return;
+    }
+
     if (participatingAs === "moderator" && !outgoing) {
       console.log("Not sending outgoing messages to the webhook");
       return;
     }
 
-    // Prepare and send payload
     let payload;
 
-    // Check if webhook is Slack webhook
     if (webhook.startsWith("https://hooks.slack.com/")) {
       payload = {
         text:
@@ -102,7 +114,6 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
     } else if (
       discordWebhookURLs.some((url) => webhook.startsWith(`https://${url}/api/webhooks/`))
     ) {
-      // Check if webhook is Discord webhook
       payload = {
         embeds: [
           {
@@ -134,7 +145,6 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
       console.error("Error sending data to webhook");
     }
   } catch (error: any) {
-    // Handle errors and log them
     console.error("Error:", error.message);
   }
 }
