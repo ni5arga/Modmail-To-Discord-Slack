@@ -70,4 +70,4 @@ Feel free to contribute and improve this project. Pull requests and issues are a
 
 ## License
 
-This source code is licensed under [GNU General Public License v3.0](https://github.com/ni5arga/Modmail-To-Discord-Slack/blob/main/LICENSE).
+This source code is licensed under [MIT License](https://github.com/ni5arga/Modmail-To-Discord-Slack/blob/main/LICENSE).
