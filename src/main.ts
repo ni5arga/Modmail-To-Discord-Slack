@@ -32,7 +32,15 @@ Devvit.addSettings([
     type: "string",
     name: "ignoreUsers",
     label: "Ignore list (comma-separated usernames, don't include u/)",
-    helpText: "Add Reddit usernames (case-insensitive) separated by commas to skip them from webhook payloads (example: username1, username2, username3)",
+    helpText:
+      "Add Reddit usernames (case-insensitive) separated by commas to skip them from webhook payloads (example: username1, username2, username3). This is totally optional.",
+  },
+  {
+    type: "string",
+    name: "rolePing",
+    label: "Discord Role ID to Ping",
+    helpText:
+      "Enter a Discord Role ID to ping when a message is sent. Leave blank to disable. This is totally optional.",
   },
 ]);
 
@@ -56,6 +64,8 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
     const webhook = (await context?.settings.get("webhook")) as string;
     const outgoing = (await context?.settings.get("outgoing")) as boolean;
     const ignoreListRaw = (await context?.settings.get("ignoreUsers")) as string;
+    const rolePing = (await context?.settings.get("rolePing")) as string | undefined;
+
     const ignoreList = (ignoreListRaw || "")
       .split(",")
       .map((u) => u.trim().toLowerCase())
@@ -69,7 +79,7 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
     const conversationId = event.conversationId ?? "";
     const actualConversationId = conversationId.replace(
       "ModmailConversation_",
-      "",
+      ""
     );
     const result = await context.reddit.modMail.getConversation({
       conversationId,
@@ -79,7 +89,8 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
 
     const messages = result.conversation?.messages ?? {};
     const messageIds = Object.keys(messages);
-    const lastMessageId = messageIds.length > 0 ? messageIds[messageIds.length - 1] : undefined;
+    const lastMessageId =
+      messageIds.length > 0 ? messageIds[messageIds.length - 1] : undefined;
     const lastMessage: MessageData | undefined = lastMessageId
       ? messages[lastMessageId]
       : undefined;
@@ -106,15 +117,20 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
 
     let payload;
 
+    // Slack webhook formatting
     if (webhook.startsWith("https://hooks.slack.com/")) {
       payload = {
-        text:
-          `*Modmail Subject:* <${modmailLink}|${result.conversation?.subject}>\n*Author:* <${authorProfileLink}|${authorName}>\n*Body:* ${body}\n\n*Participant:* ${result.conversation?.participant?.name}\n*Participating As:* ${participatingAs}`,
+        text: `*Modmail Subject:* <${modmailLink}|${result.conversation?.subject}>\n*Author:* <${authorProfileLink}|${authorName}>\n*Body:* ${body}\n\n*Participant:* ${result.conversation?.participant?.name}\n*Participating As:* ${participatingAs}`,
       };
-    } else if (
-      discordWebhookURLs.some((url) => webhook.startsWith(`https://${url}/api/webhooks/`))
+    }
+    // Discord webhook formatting
+    else if (
+      discordWebhookURLs.some((url) =>
+        webhook.startsWith(`https://${url}/api/webhooks/`)
+      )
     ) {
       payload = {
+        content: rolePing ? `<@&${rolePing}>` : undefined,
         embeds: [
           {
             title: `${result.conversation?.subject}`,
@@ -123,8 +139,7 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
               name: authorName,
               url: authorProfileLink,
             },
-            description:
-              `Author: [**${authorName}**](${authorProfileLink})\nBody: **${body}**\n\nParticipant: **${result.conversation?.participant?.name}**\nParticipating As: **${participatingAs}**`,
+            description: `Author: [**${authorName}**](${authorProfileLink})\nBody: **${body}**\n\nParticipant: **${result.conversation?.participant?.name}**\nParticipating As: **${participatingAs}**`,
             color: 3447003,
           },
         ],
