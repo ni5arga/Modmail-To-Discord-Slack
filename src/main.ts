@@ -56,10 +56,7 @@ Devvit.addTrigger({
   event: "ModMail",
   onEvent: async (event: ModMail, context: TriggerContext) => {
     try {
-      if (!context) {
-        throw new Error("Context is probably undefined");
-      }
-
+      if (!context) throw new Error("Context is probably undefined");
       await sendModMailToWebhook(event, context);
     } catch (error: any) {
       console.error("There was an error:", error.message);
@@ -69,11 +66,11 @@ Devvit.addTrigger({
 
 async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
   try {
-    const webhook = (await context?.settings.get("webhook")) as string;
-    const outgoing = (await context?.settings.get("outgoing")) as boolean;
-    const ignoreListRaw = (await context?.settings.get("ignoreUsers")) as string;
-    const rolePing = (await context?.settings.get("rolePing")) as string | undefined;
-    const onlyModDiscussions = (await context?.settings.get("onlyModDiscussions")) as boolean;
+    const webhook = (await context.settings.get("webhook")) as string;
+    const outgoing = (await context.settings.get("outgoing")) as boolean;
+    const ignoreListRaw = (await context.settings.get("ignoreUsers")) as string;
+    const rolePing = (await context.settings.get("rolePing")) as string | undefined;
+    const onlyModDiscussions = (await context.settings.get("onlyModDiscussions")) as boolean;
 
     const ignoreList = (ignoreListRaw || "")
       .split(",")
@@ -96,14 +93,12 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
     });
 
     const isModDiscussion = result.conversation?.isInternal ?? false;
-
     if (onlyModDiscussions && !isModDiscussion) {
       console.log("Skipping regular modmail because only mod discussions are enabled.");
       return;
     }
 
     const modmailLink = `https://mod.reddit.com/mail/all/${actualConversationId}`;
-
     const messages = result.conversation?.messages ?? {};
     const messageIds = Object.keys(messages);
     const lastMessageId =
@@ -121,6 +116,7 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
     const body = lastMessage.bodyMarkdown ?? "";
     const participatingAs = lastMessage.participatingAs ?? "Unknown";
     const authorProfileLink = `https://www.reddit.com/u/${authorName}`;
+    const isPrivateNote = lastMessage.isInternal ?? false;
 
     if (ignoreList.includes(authorName.toLowerCase())) {
       console.log(`User "${authorName}" is in the ignore list. Skipping webhook.`);
@@ -134,11 +130,14 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
 
     let payload;
 
+    // slack payload
     if (webhook.startsWith("https://hooks.slack.com/")) {
       payload = {
-        text: `*Modmail Subject:* <${modmailLink}|${result.conversation?.subject}>\n*Author:* <${authorProfileLink}|${authorName}>\n*Body:* ${body}\n\n*Participant:* ${result.conversation?.participant?.name}\n*Participating As:* ${participatingAs}`,
+        text: `*Modmail Subject:* <${modmailLink}|${result.conversation?.subject}>\n*Author:* <${authorProfileLink}|${authorName}>\n*Body:* ${body}\n\n*Participant:* ${result.conversation?.participant?.name}\n*Participating As:* ${participatingAs}${isPrivateNote ? "\n*Note:* This is a private note." : ""}`,
       };
-    } else if (
+    }
+    // discord payload
+    else if (
       discordWebhookURLs.some((url) =>
         webhook.startsWith(`https://${url}/api/webhooks/`)
       )
@@ -154,7 +153,8 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
               url: authorProfileLink,
             },
             description: `Author: [**${authorName}**](${authorProfileLink})\nBody: **${body}**\n\nParticipant: **${result.conversation?.participant?.name}**\nParticipating As: **${participatingAs}**`,
-            color: 3447003,
+            color: isPrivateNote ? 0x00cc66 : 0x3498db, // different colors for private notes and regular messages
+            footer: isPrivateNote ? { text: "📌 Private Moderator Note" } : undefined,
           },
         ],
       };
