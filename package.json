@@ -17,7 +17,7 @@
     "test:unit": "vitest --run --passWithNoTests"
   },
   "dependencies": {
-    "@devvit/public-api": "0.11.17"
+    "@devvit/public-api": "0.11.18"
   },
   "devDependencies": {
     "typescript": "5.8.3",
