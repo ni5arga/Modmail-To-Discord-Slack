@@ -42,6 +42,14 @@ Devvit.addSettings([
     helpText:
       "Enter a Discord Role ID to ping when a message is sent. Leave blank to disable. This is totally optional.",
   },
+  {
+    type: "boolean",
+    name: "onlyModDiscussions",
+    label: "Only Sync Mod Discussions",
+    helpText:
+      "If enabled, only mod discussion messages will be sent to the webhook. Messages from users will be ignored.",
+    defaultValue: false,
+  },
 ]);
 
 Devvit.addTrigger({
@@ -65,6 +73,7 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
     const outgoing = (await context?.settings.get("outgoing")) as boolean;
     const ignoreListRaw = (await context?.settings.get("ignoreUsers")) as string;
     const rolePing = (await context?.settings.get("rolePing")) as string | undefined;
+    const onlyModDiscussions = (await context?.settings.get("onlyModDiscussions")) as boolean;
 
     const ignoreList = (ignoreListRaw || "")
       .split(",")
@@ -85,6 +94,14 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
       conversationId,
       markRead: false,
     });
+
+    const isModDiscussion = result.conversation?.isInternal ?? false;
+
+    if (onlyModDiscussions && !isModDiscussion) {
+      console.log("Skipping regular modmail because only mod discussions are enabled.");
+      return;
+    }
+
     const modmailLink = `https://mod.reddit.com/mail/all/${actualConversationId}`;
 
     const messages = result.conversation?.messages ?? {};
@@ -117,14 +134,11 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
 
     let payload;
 
-    // Slack webhook formatting
     if (webhook.startsWith("https://hooks.slack.com/")) {
       payload = {
         text: `*Modmail Subject:* <${modmailLink}|${result.conversation?.subject}>\n*Author:* <${authorProfileLink}|${authorName}>\n*Body:* ${body}\n\n*Participant:* ${result.conversation?.participant?.name}\n*Participating As:* ${participatingAs}`,
       };
-    }
-    // Discord webhook formatting
-    else if (
+    } else if (
       discordWebhookURLs.some((url) =>
         webhook.startsWith(`https://${url}/api/webhooks/`)
       )
