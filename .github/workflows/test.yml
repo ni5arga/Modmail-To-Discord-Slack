@@ -7,7 +7,7 @@ jobs:
           - name: checkout repo
             uses: actions/checkout@v5
           - name: use node.js
-            uses: actions/setup-node@v4
+            uses: actions/setup-node@v6
             with:
               node-version: '20.x'
           - run: npm install # TODO change to npm ci when package.json and package-lock.json are in sync
