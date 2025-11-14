@@ -64,6 +64,14 @@ Devvit.addTrigger({
   },
 });
 
+function truncateDescription(description: string, maxLength: number = 4096): string {
+  if (description.length <= maxLength) {
+    return description;
+  }
+  const truncationIndicator = "... (truncated)";
+  return description.substring(0, maxLength - truncationIndicator.length) + truncationIndicator;
+}
+
 async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
   try {
     const webhook = (await context.settings.get("webhook")) as string;
@@ -142,6 +150,7 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
         webhook.startsWith(`https://${url}/api/webhooks/`)
       )
     ) {
+      const description = `Author: [**${authorName}**](${authorProfileLink})\nBody: **${body}**\n\nParticipant: **${result.conversation?.participant?.name}**\nParticipating As: **${participatingAs}**`;
       payload = {
         content: rolePing ? `<@&${rolePing}>` : undefined,
         embeds: [
@@ -152,7 +161,7 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
               name: authorName,
               url: authorProfileLink,
             },
-            description: `Author: [**${authorName}**](${authorProfileLink})\nBody: **${body}**\n\nParticipant: **${result.conversation?.participant?.name}**\nParticipating As: **${participatingAs}**`,
+            description: truncateDescription(description),
             color: isPrivateNote ? 0x00cc66 : 0x3498db, // different colors for private notes and regular messages
             footer: isPrivateNote ? { text: "📌 Private Moderator Note" } : undefined,
           },

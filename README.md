@@ -58,6 +58,7 @@ The app sends all incoming and outgoing modmails from your subreddit's modmail t
 - Added ignore-list which helps mods to ignore messages from certain users/mods.
 - Added discord role-ping feature.
 - Mod discussion syncing setting.
+- Fix Discord embed character limit issue.
 
 **Previous Versions:**
 - Add setting for app to ignore outgoing modmail messages by mods and not send them to the webhook 
