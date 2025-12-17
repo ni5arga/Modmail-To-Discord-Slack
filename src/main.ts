@@ -106,7 +106,7 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
       return;
     }
 
-    const modmailLink = `https://mod.reddit.com/mail/all/${actualConversationId}`;
+    const modmailLink = `https://reddit.com/mail/all/${actualConversationId}`;
     const messages = result.conversation?.messages ?? {};
     const messageIds = Object.keys(messages);
     const lastMessageId =
