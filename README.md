@@ -44,7 +44,7 @@ App Link: https://developers.reddit.com/apps/modmailtodiscord
 The app sends all incoming and outgoing modmails from your subreddit's modmail to your Discord/Slack channel through webhooks. Here are the details the app currently sends (more to be added soon):
 
 1. **Modmail Subject** - The subject of the modmail (incoming or outgoing)
-2. **Modmail Link** - The link of the modmail thread, the app sends `https://mod.reddit.com/all/{conversation-ID-here}` links
+2. **Modmail Link** - The link of the modmail thread, the app sends `https://reddit.com/mail/all/{conversation-ID-here}` links
 3. **Author** - Author of the modmail message or the latest message in the modmail thread
 4. **Body** - Sends the message body in Markdown
 5. **Participant** - The participant of the modmail conversation (most of the times it'll be the user, unless it's a mod discussion or a subreddit to subreddit conversation)

@@ -64,6 +64,10 @@ Devvit.addTrigger({
   },
 });
 
+function escapeSlackMrkdwn(text: string): string {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 function truncateDescription(description: string, maxLength: number = 4096): string {
   if (description.length <= maxLength) {
     return description;
@@ -140,8 +144,12 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
 
     // slack payload
     if (webhook.startsWith("https://hooks.slack.com/")) {
+      const slackSubject = escapeSlackMrkdwn(result.conversation?.subject ?? "");
+      const slackAuthor = escapeSlackMrkdwn(authorName);
+      const slackBody = escapeSlackMrkdwn(body);
+      const slackParticipant = escapeSlackMrkdwn(result.conversation?.participant?.name ?? "");
       payload = {
-        text: `*Modmail Subject:* <${modmailLink}|${result.conversation?.subject}>\n*Author:* <${authorProfileLink}|${authorName}>\n*Body:* ${body}\n\n*Participant:* ${result.conversation?.participant?.name}\n*Participating As:* ${participatingAs}${isPrivateNote ? "\n*Note:* This is a private note." : ""}`,
+        text: `*Modmail Subject:* <${modmailLink}|${slackSubject}>\n*Author:* <${authorProfileLink}|${slackAuthor}>\n*Body:* ${slackBody}\n\n*Participant:* ${slackParticipant}\n*Participating As:* ${participatingAs}${isPrivateNote ? "\n*Note:* This is a private note." : ""}`,
       };
     }
     // discord payload
