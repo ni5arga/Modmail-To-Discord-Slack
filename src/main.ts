@@ -158,7 +158,7 @@ async function sendModMailToWebhook(event: ModMail, context: TriggerContext) {
         webhook.startsWith(`https://${url}/api/webhooks/`)
       )
     ) {
-      const description = `Author: [**${authorName}**](${authorProfileLink})\nBody: **${body}**\n\nParticipant: **${result.conversation?.participant?.name}**\nParticipating As: **${participatingAs}**`;
+      const description = `**Author:** [${authorName}](${authorProfileLink})\n**Body:** ${body}\n\n**Participant:** ${result.conversation?.participant?.name}\n**Participating As:** ${participatingAs}`;
       payload = {
         content: rolePing ? `<@&${rolePing}>` : undefined,
         embeds: [
